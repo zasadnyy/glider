@@ -44,6 +44,322 @@ URL: https://code.google.com/p/io-2012-slides
     </hgroup>
   </slide>
 
+    <slide>
+    <hgroup>
+      <h2>Why A New Build System?</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Extensibility / Customization / Stable APIs</li>
+        <li>Unified across CI Servers and IDEs</li>
+        <li>Standart and advanced features</li>
+      </ul>
+      <ul class="build">
+          <li>Current solutions (aka Ant, Maven) are not ideal</li>
+      </ul>
+    </article>
+  </slide>  
+    
+  <slide>
+    <hgroup>
+      <h2>Why Gradle?</h2>
+    </hgroup>
+    <article>
+      <ul>
+        <li>Powerful Build System
+            <ul>
+                <li>Declarative, Flexible</li>
+                <li>Imperative customization</li>
+                <li>Tooling API</li>
+            </ul>
+        </li>
+      </ul>
+      <ul class="build">
+        <li>Build System Toolkit
+            <ul>
+                <li>Plugins create own DSL, APIs, IDE integration</li>
+            </ul>
+        </li>
+      </ul>
+      <ul class="build">
+          <li>Free / Open Source</li>
+      </ul>
+    </article>
+  </slide>  
+    
+    
+  <slide class="segue dark nobackground">
+    <aside class="gdbar"><img src="images/gdg_icon_128.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Gradle Basics</h2>
+    </hgroup>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Simple Java Project</h2>
+    </hgroup>
+    <article>
+        <pre class="prettyprint" data-lang="build.gradle">
+           
+apply plugin: 'java'
+
+
+
+
+
+
+        </pre>
+    </article>
+  </slide>
+    
+  <slide>
+    <hgroup>
+      <h2>Simple Android Project</h2>
+    </hgroup>
+    <article>
+        <pre class="prettyprint" data-lang="build.gradle">
+           
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath 'com.android.tools.build:gradle:0.4' }
+}
+
+apply plugin: 'android'
+
+<b>
+android {
+    compileSdkVersion 17
+    buildToolsVersion: '17.0.0'
+}
+            </b>
+        </pre>
+    </article>
+  </slide>
+    
+  <slide>
+    <hgroup>
+      <h2>Conventions: Source Folders</h2>
+    </hgroup>
+    <article>
+      <div class="columns-2">
+          <p>
+              <code>src/main/java</code><br/>
+              <code>src/main/resources</code>
+          </p>
+          <p>
+              <code>src/test/java</code><br/>
+              <code>src/test/resources</code>
+          </p>
+      </div>
+    </article>
+  </slide>
+    
+  <slide>
+    <aside class="note">
+      <section>
+        <p><b>Note:</b> AndroidManifest.xml for instrumentTest is generated automatically, I'll talk about it in detail a bit later</p>
+      </section>
+    </aside>
+    <hgroup>
+      <h2>Conventions: Source Folders Android</h2>
+    </hgroup>
+    <article>
+      <div class="columns-2">
+          <p>
+              <code>src/main/AndroidManifest.xml</code><br/>
+              <code>src/main/java</code><br/>
+              <code>src/main/resources</code><br/>
+              <code>src/main/res</code><br/>
+              <code>src/main/assets</code><br/>
+              <code>src/main/aidl</code><br/>
+              <code>src/main/rs</code><br/>
+              <code>src/main/jni</code><br/>
+          </p>
+          <p>
+              <br/>
+              <code>src/instrumentTest/java</code><br/>
+              <code>src/instrumentTest/resources</code><br/>
+              <code>src/instrumentTest/res</code><br/>
+              <code>src/instrumentTest/assets</code><br/>
+              <code>src/instrumentTest/aidl</code><br/>
+              <code>src/instrumentTest/rs</code><br/>
+              <code>src/instrumentTest/jni</code><br/>
+          </p>
+      </div>
+    </article>
+  </slide>
+    
+    
+  <slide>
+      <aside class="note">
+          <section>
+              <p>And now I'll show you first feature you'll definitelly like</p>
+          </section>
+      </aside>
+      <hgroup>
+          <h2>Configuration for old projects</h2>
+      </hgroup>
+      <article>
+          <pre class="prettyprint" data-lang="build.gradle">
+           
+android {
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs ['src']
+            res.srcDirs ['res']
+        }
+        
+        instrumentTest.setRoot('tests')
+    }
+}
+        </pre>
+      </article>
+  </slide>    
+    
+    
+    <slide hidden>
+        <hgroup>
+            <h2>Continuous drawable folders</h2>
+        </hgroup>
+        <article class="flexbox vcenter">
+            <img src="images/content/continuous_drawable_folder.png" alt="Continuous drawables folders" title="Continuous drawables folders">
+            <footer class="source">source: real life</footer>
+        </article>
+    </slide>
+    
+    
+    <slide>
+      <aside class="note">
+          <p>Several src and res folders</p>
+      </aside>
+      <hgroup>
+          <h2>Configuration for old projects</h2>
+      </hgroup>
+      <article>
+          <pre class="prettyprint" data-lang="build.gradle">
+           
+android {
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs ['src']
+            <b>res.srcDirs ['res', 'res2']</b>
+        }
+        
+        instrumentTest.setRoot('tests')
+    }
+}
+        </pre>
+      </article>
+    </slide>    
+    
+    
+    <slide>
+        <hgroup>
+            <h2>Gradle Tasks</h2>
+        </hgroup>
+        <article>
+            <code>$ cd myproject/</code><br/>
+            <code>$ cd gradle &lt;taskName1&gt; [taskName2]</code><br/>
+            <br/><br/>
+            <code>$ cd gradle tasks [--all]</code>
+        </article>
+    </slide>
+    
+ 
+    <slide>
+        <hgroup>
+            <h2>Gradle Tasks</h2>
+        </hgroup>
+        <article>
+            <p>
+                <code>assemble</code><br/>
+                <br/>
+                <br/>
+                <code>check</code><br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <code>build</code><br/>
+                <code>&nbsp;&nbsp;-> assemble + check</code><br/>
+                <br/>
+                <code>clean</code><br/>
+                <br/>
+            </p>
+            <div class="build">
+                <p>
+                    <code style="position: absolute; top: 159px; left: 60px;" class="red">&nbsp;&nbsp;jar</code>
+                    <code style="position: absolute; top: 239px; left: 60px;" class="red">&nbsp;&nbsp;test</code><br/>
+                </p>
+                <p style="position: absolute; top: 264px; left: 60px;">
+                    <code class="red">&nbsp;&nbsp;findBugsMain</code><br/>
+                    <code class="red">&nbsp;&nbsp;findBugsTests</code><br/>
+                </p>
+            </div>
+        </article>
+    </slide>
+    
+    
+    <slide>
+        <hgroup>
+            <h2>Gradle Tasks</h2>
+        </hgroup>
+        <article>
+            <div class="columns-2">
+                <p>
+                    <code>assemble</code><br/>
+                    <code>&nbsp;&nbsp;jar</code><br/>
+                    <br/>
+                    <code>check</code><br/>
+                    <code>&nbsp;&nbsp;test</code><br/>
+                    <code>&nbsp;&nbsp;findBugsMain</code><br/>
+                    <code>&nbsp;&nbsp;findBugsTests</code><br/>
+                    <br/>
+                    <code>build</code><br/>
+                    <code>&nbsp;&nbsp;-> assemble + check</code><br/>
+                    <br/>
+                    <code>clean</code><br/>
+                    <br/>
+                </p>
+                <p>
+                    <code>assemble</code><br/>
+                    <br/>
+                    <br/>
+                    <code>check</code><br/>
+                    <code>connectedCheck</code><br/>
+                    <code>deviceCheck</code><br/>
+                    <br/>
+                    <br/>
+                    <code>build</code><br/>
+                    <code>&nbsp;&nbsp;-> assemble + check</code><br/>
+                    <br/>
+                    <code>clean</code><br/>
+                    <br/>
+                </p>
+            </div>
+            <div class="build">
+                <p>
+                    <nobr>
+                        <code style="position: absolute; top: 163px; left: 562px;" class="red">&nbsp;&nbsp;assembleDebug + assembleRelease</code>
+                    </nobr>
+                </p>
+            </div>
+        </article>
+    </slide>
+    
+    
+    <slide class="segue dark nobackground">
+        <aside class="gdbar"><img src="images/gdg_icon_128.png"></aside>
+        <hgroup class="auto-fadein">
+            <h2>Customization</h2>
+        </hgroup>
+    </slide>
+    
+    <!--Sample slides-->
+    
   <slide>
     <hgroup>
       <h2>Slide with Bullets</h2>
@@ -381,14 +697,14 @@ function helloWorld(world) {
     <aside class="gdbar right"><img src="images/gdg_icon_128.png"></aside>
     <article class="flexbox vleft auto-fadein">
       <h2>&lt;Thank You!&gt;</h2>
-      <p>Important contact information goes here.</p>
+      <p>Presentation will be available at github</p>
     </article>
     <p class="auto-fadein" data-config-contact>
       <!-- populated from slide_config.json -->
     </p>
   </slide>
 
-  <slide class="logoslide dark nobackground">
+  <slide class="logoslide dark nobackground" hidden>
     <article class="flexbox vcenter">
       <span><img src="images/gdg_logo_white.png"></span>
     </article>
