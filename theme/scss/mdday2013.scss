@@ -35,6 +35,10 @@ slides > slide {
   }
 }
 
+slides > slide:not(.nobackground):before {
+    content: "#mddaylviv";
+}
+
 code {
    color: #444;
 }

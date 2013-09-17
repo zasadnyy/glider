@@ -35,6 +35,11 @@ slides > slide.title-slide hgroup p {
 }
 
 /* line 38, ../scss/mdday2013.scss */
+slides > slide:not(.nobackground):before {
+  content: "#mddaylviv";
+}
+
+/* line 42, ../scss/mdday2013.scss */
 code {
   color: #444;
 }
