@@ -23,7 +23,7 @@ var SLIDE_CONFIG = {
   // Author information
   presenters: [{
     name: 'Vitaliy Zasadnyy',
-    company: 'Team Lead, Game Developer<br>Nravo Inc.',
+    company: '<br>Founder, Manager @ GDG Lviv<br>Team Lead, Game Developer @ Nravo Inc.',
     gplus: 'https://gplus.to/zasadnyy',
     twitter: '@zasadnyy',
     www: 'http://zasadnyy.org.ua',

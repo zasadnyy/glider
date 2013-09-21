@@ -45,6 +45,15 @@ URL: https://code.google.com/p/io-2012-slides
   </slide>
 
     <slide>
+        <aside class="note">
+            <section>
+                <ul>
+                    <li>customizable Ant scripts</li>
+                    <li>IDEs has their own builders, IDEA has good one, but it doen't support Manifest merging, mvn is also very flexible, good for CI, but IDE integrations is pain - and it breaks your workflow</li>
+                    <li>besides basic features, like dependency management, running test, etc it woould be cool if new build system has support for android specific features</li>
+                </ul>
+            </section>
+        </aside>
     <hgroup>
       <h2>Why A New Build System?</h2>
     </hgroup>
@@ -61,6 +70,17 @@ URL: https://code.google.com/p/io-2012-slides
   </slide>  
     
   <slide>
+      <aside class="note">
+          <section>
+              <ul>
+                  <li><b>Declarative</b> - it much easier to read gradle files than mvn or ant xml's</li>
+                  <li><b>Flexible</b> - allows a lot of customization of build process</li>
+                  <li><b>Tooling API</b> - allows to povide great IDE integration</li>
+                  <li><b>Build System Toolkit</b> - we created custom DSL for android plugint to satisfy all needs and provide simple API for 3rd party developers</li>
+                  <li><b>Open source</b> - licence: Apache </li>
+              </ul>
+          </section>
+      </aside>
     <hgroup>
       <h2>Why Gradle?</h2>
     </hgroup>
@@ -89,6 +109,11 @@ URL: https://code.google.com/p/io-2012-slides
     
     
   <slide class="segue dark nobackground">
+      <aside class="note">
+          <section>
+              <b>Ask:</b> how many of you ever tried Gradle? What about Android plugin?
+          </section>
+      </aside>
     <aside class="gdbar"><img src="images/gdg_icon_128.png"></aside>
     <hgroup class="auto-fadein">
       <h2>Gradle Basics</h2>
@@ -96,6 +121,15 @@ URL: https://code.google.com/p/io-2012-slides
   </slide>
 
   <slide>
+      <aside class="note">
+          <section>
+              <ul>
+                  Simple java project
+                  <li><b>build.gradle</b> - all configuration goes here, located in root of your project</li>
+                  <li><b>one line == </b> - build main code + generate jar + build tests + run tests + write output to xml</li>
+              </ul>
+          </section>
+      </aside>
     <hgroup>
       <h2>Simple Java Project</h2>
     </hgroup>
@@ -114,6 +148,16 @@ apply plugin: 'java'
   </slide>
     
   <slide>
+      <aside class="note">
+          <section>
+              <ul>
+                  <li>First lines defines where our plugin sould be downloaded, this declaration will be improoved in the future to be less verbose</li>
+                  <li>compileSdkVersion - is sth previously called targetSdk in project.properties</li>
+                  <li><b>What this will do?</b> Build apk, buid test apk (btw tests are again in main project, coz it was hard to find relation between projects), run test on all connected devices in parallel and generate report</li>
+                  
+              </ul>
+          </section>
+      </aside>
     <hgroup>
       <h2>Simple Android Project</h2>
     </hgroup>
@@ -122,7 +166,7 @@ apply plugin: 'java'
            
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath 'com.android.tools.build:gradle:0.4' }
+    dependencies { classpath 'com.android.tools.build:gradle:0.5.+' }
 }
 
 apply plugin: 'android'
@@ -138,6 +182,11 @@ android {
   </slide>
     
   <slide>
+      <aside class="note">
+          <section>
+              Note: we didn't configure anything, it's convetion over configuration
+          </section>
+      </aside>
     <hgroup>
       <h2>Conventions: Source Folders</h2>
     </hgroup>
@@ -158,6 +207,10 @@ android {
   <slide>
     <aside class="note">
       <section>
+          <ul>
+              <li>We have...</li>
+              <li>Test are moved to "instrumentTests" folder, regural "test" folder left for JUnit tests</li>
+          </ul>
         <p><b>Note:</b> AndroidManifest.xml for instrumentTest is generated automatically, I'll talk about it in detail a bit later</p>
       </section>
     </aside>
@@ -232,7 +285,9 @@ android {
     
     <slide>
       <aside class="note">
-          <p>Several src and res folders</p>
+          <section>
+            <p>Several src and res folders</p>
+          </section>
       </aside>
       <hgroup>
           <h2>Configuration for old projects</h2>
@@ -257,6 +312,11 @@ android {
     
     
     <slide>
+        <aside class="note">
+            <section>
+                In complex projects gradle tasks will print around 50 commands, but actually we don't care about all of them
+            </section>
+        </aside>
         <hgroup>
             <h2>Gradle Tasks</h2>
         </hgroup>
@@ -360,6 +420,14 @@ android {
     
     
     <slide>
+        <aside class="note">
+             <section>
+                 <ul>
+                     <li>Values from configuration will be injected directly to AndroidMAnifest</li>
+                     <li><b>Why should I do that?</b>  imagine you have nightly builds...</li>
+                 </ul>
+             </section>
+         </aside>
         <hgroup>
             <h2>Basic Customization</h2>
         </hgroup>
@@ -380,7 +448,41 @@ android {
     </slide>
     
     
+      <slide>
+         <aside>
+             <section>
+                 e.g. on CI server it could get code from some property and on desktop return default value -1, so version code won't be incremented
+                 <b>So you can do some custom logic, but it is still very declarative </b>
+             </section>
+         </aside> 
+        <hgroup>
+            <h2>Basic Customization</h2>
+        </hgroup>
+        <article>
+            <pre class="prettyprint" data-lang="build.gradle">
+
+def <b>getVersionCode()</b> {
+    def code = ...
+    return code
+}
+
+android {
+    defaultConfig {
+        versionCode <b>getVersionCode()</b>
+        ...
+    }
+}
+            </pre>     
+        </article>
+    </slide>
+    
      <slide>
+         <aside>
+             <section>
+                 Many of Android developers asked to make sth that will allow easily what to include in build and actually waht to build. And with gradle we have this in build type concept.
+                 <b>By default there is debug and release build types, but you can easily create new ones</b>
+             </section>
+         </aside>
         <hgroup>
             <h2>Build Types</h2>
         </hgroup>
@@ -703,7 +805,7 @@ MyProject/
                     </pre> 
                 </div>
                 <div>
-                    <pre class="prettyprint" data-lang="build.gradle">
+                    <pre class="prettyprint" data-lang="settings.gradle">
 
     include ':app'
     include ':libs:lib1'
@@ -1157,6 +1259,25 @@ android {
         </article>
     </slide>
    
+    
+     <slide>    
+      <aside class="note">
+          <section>
+              
+          </section>
+      </aside>
+        <hgroup>
+            <h2>Usefull links</h2>
+        </hgroup>
+        <article>
+            <ul>
+                <li><a href="http://tools.android.com/tech-docs/new-build-system/user-guide">Android Plugin User Guide</a></li>
+                <li><a href="http://www.gradle.org/documentation">Gradle Documentation</a></li>
+                <li><a href="http://www.gradleware.com/registered-access?content=books%2Fbuilding-and-testing%2F">Book: Building and Testing with Gradle</a></li>
+            </ul>
+        </article>
+  </slide>
+    
 
   <slide class="thank-you-slide segue nobackground">
     <aside class="gdbar right"><img src="images/gdg_icon_128.png"></aside>
