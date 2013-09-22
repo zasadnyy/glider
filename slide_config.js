@@ -1,12 +1,12 @@
 var SLIDE_CONFIG = {
   // Slide settings
   settings: {
-    title: 'Title Goes Here<br>Up To Two Lines',
-    subtitle: 'Subtitle Goes Here',
-    //eventInfo: {
-    //  title: 'Google I/O',
-    //  date: '6/x/2013'
-    //},
+    title: 'Gradle',
+    subtitle: 'New Android build system',
+//    eventInfo: {
+//      title: 'MDday Lviv',
+//      date: '21/09/2013'
+//    },
     useBuilds: true, // Default: true. False will turn off slide animation builds.
     usePrettify: true, // Default: true
     enableSlideAreas: true, // Default: true. False turns off the click areas on either slide of the slides.
@@ -17,18 +17,18 @@ var SLIDE_CONFIG = {
       'Open Sans:regular,semibold,italic,italicsemibold',
       'Source Code Pro'
     ],
-    //theme: ['mytheme'], // Add your own custom themes or styles in /theme/css. Leave off the .css extension.
+    theme: ['mdday2013'], // Add your own custom themes or styles in /theme/css. Leave off the .css extension.
   },
 
   // Author information
   presenters: [{
-    name: 'Firstname Lastname',
-    company: 'Job Title<br>Google',
-    gplus: 'http://plus.google.com/1234567890',
-    twitter: '@yourhandle',
-    www: 'http://www.you.com',
-    github: 'http://github.com/you'
-  }/*, {
+    name: 'Vitaliy Zasadnyy',
+    company: '<br>Founder, Manager @ GDG Lviv<br>Team Lead, Game Developer @ Nravo Inc.',
+    gplus: 'https://gplus.to/zasadnyy',
+    twitter: '@zasadnyy',
+    www: 'http://zasadnyy.org.ua',
+    github: 'https://github.com/zasadnyy'
+  }, /*{
     name: 'Second Name',
     company: 'Job Title, Google',
     gplus: 'http://plus.google.com/1234567890',
