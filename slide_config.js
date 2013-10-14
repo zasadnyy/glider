@@ -17,7 +17,7 @@ var SLIDE_CONFIG = {
       'Open Sans:regular,semibold,italic,italicsemibold',
       'Source Code Pro'
     ],
-    theme: ['dfkosice2013'], // Add your own custom themes or styles in /theme/css. Leave off the .css extension.
+    theme: ['devfest'], // Add your own custom themes or styles in /theme/css. Leave off the .css extension.
   },
 
   // Author information
