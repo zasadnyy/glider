@@ -1139,7 +1139,7 @@ android {
   </slide>
     
     
-  <slide>    
+  <slide class="hidden">    
       <aside class="note">
           <section>
               You can have up to 4 different source folders to merge
@@ -1162,7 +1162,7 @@ android {
   </slide>
     
     
-  <slide>    
+  <slide class="hidden">    
       <aside class="note">
           <section>
               
@@ -1189,7 +1189,7 @@ android {
         </article>
     </slide>
     
-    <slide>    
+    <slide class="hidden">    
       <aside class="note">
           <section>
               
@@ -1217,7 +1217,7 @@ android {
     </slide>
     
     
-    <slide>    
+    <slide class="hidden">    
       <aside class="note">
           <section>
               
@@ -1259,6 +1259,159 @@ android {
         </article>
     </slide>
    
+    
+     <slide>    
+      <aside class="note">
+          <section>
+              <p><b>Only one Build Type is tested</b> - for now only debug Build Type is supported, but this is the thing to change in the future</p><br>
+              <p>Now we can test our library projects, if we have one test apk will be generated that includes library</p><br>
+              <p>This all was about building test, let's talk about running them</p>
+          </section>
+      </aside>
+        <hgroup>
+            <h2>Testing Recap</h2>
+        </hgroup>
+        <article>
+            <ul>
+                <li>Test Source Sets: <code>src/instrumentTest, src/instrumentTestFlavor1</code></li><br/>
+                <li>Dependency Scopes: <code>instrumentTestCompile, instrumentTestFlavor1Compile</code></li><br/>
+                <li>Genearated <code>AndroidManifest.xml</code></li><br/>
+                <li>Only one Build Type is tested</li><br/>
+                <li>Library embedded into Test APK</li>
+            </ul>
+        </article>
+    </slide>
+    
+    
+    <slide>    
+      <aside class="note">
+          <section>
+             <ul>
+                <li><code>check</code> - static analysis like FindBugs, Robo Electric, etc</li>
+                <li><code>connectedCheck</code> - the most common one, when you sit in fromt of your desk, and run tests on all connected devices in paralel</li>
+                <li><code>deviceCheck</code> - this is the case for Build Servers, there is some problems, e.g. if you have several build servers, devices should be connected to all of them, second one is when you run your instrumentation test in parallel, and they hits UI - it's just don't work.<br>There are two sub scenarios of this scenario</li>
+            </ul>
+          </section>
+      </aside>
+        <hgroup>
+            <h2>Testing Scenarios</h2>
+        </hgroup>
+        <article>
+            <ul>
+                <li><code>check</code></li><br>
+                <li><code>connectedCheck</code></li><br/>
+                <li><code>deviceCheck</code></li><br/>
+            </ul>
+        </article>
+    </slide>
+    
+    <slide>    
+      <aside class="note">
+          <section>
+              <ul>
+                    <li><b>Delayed / Queuded tests</b> - imagine you have you device lab, your build server build apk, puts them into queue and run one by one. Note that it won't be your Jenkins build server but separate one, with separate dashboard. Important thing to note here is that Jenkins is not aware of all our Build Variant that we were talking about few minutes ago, so you'll have to reconfigure Jenkins (or othe CI server) each time you add/remove variants</li>
+              </ul>
+              <ul>
+                    <li><b>Test server API</b> - you can easily implement it, or as an option you can use 3d party services that impement it, like <a href="https://appthwack.com/">AppThwack</a>, <a href="http://testdroid.com/">Testdroid</a>, etc</li>
+              </ul>
+          </section>
+      </aside>
+        <hgroup>
+            <h2>Device Scenarios</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li class="auto-fadein">Delayed / Queuded tests
+                    <ul>
+                        <li>Upload APKs to service</li>
+                        <li>Queued tests</li>
+                        <li>Remote report/dashboard</li>
+                    </ul>
+                    <br>
+                </li>
+                <li>Test server API
+                    <ul>
+                        <li>Upload APKs method</li>
+                        <li>Plugin register itself to the android plugin</li>
+                        <li>Support any number of Servers</li>
+                    </ul>
+                </li>
+            </ul>
+        </article>
+    </slide>
+    
+    
+    <slide>    
+      <aside class="note">
+          <section>
+             One of the companies that is provideing this kind of API is <a href="https://www.manymo.com/">Manymo</a>
+          </section>
+      </aside>
+        <hgroup>
+            <h2>Device Scenarios</h2>
+        </hgroup>
+        <article>
+            <ul class="build">
+                <li class="auto-fadein">Devices Available on-demand
+                    <ul>
+                        <li>Direct connection to device</li>
+                        <li>Local / Cloud emulators</li>
+                        <li>Local report / dashboard</li>
+                    </ul>
+                    <br>
+                </li>
+                <li>DeviceProvider / DeviceConnector API
+                    <ul>
+                        <li>Return list of DeviceConnectors</li>
+                        <li>Connect, install, run tests, uninstall on each device</li>
+                        <li>Support of any number of Providers</li>
+                    </ul>
+
+            </ul>
+        </article>
+    </slide>
+    
+    
+      <slide class="segue dark nobackground">
+      <aside class="note">
+          <section>
+              And the last thing I want to talk about is Build Environment
+          </section>
+      </aside>
+    <aside class="gdbar"><img src="images/gdg_icon_128.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Build Environment</h2>
+    </hgroup>
+  </slide>
+    
+    <slide>    
+      <aside class="note">
+          <section>
+            
+          </section>
+      </aside>
+        <hgroup>
+            <h2>Build Environment</h2>
+        </hgroup>
+        <article>
+            <ul class="build" style="list-style-type: none !important;">
+                <li class="auto-fadein">Gradle Version
+                    <ul><li>Use the Wrapper!</li></ul>
+                    <br>
+                </li>
+                <li>Plugin Version
+                    <ul><li><code>'com.android.tools.buid:gradle:<span class="red">0.5</span>'</code></li></ul>
+                    <br>
+                </li>
+                <li>Build Tools Version
+                    <ul><li><code>android.buildToolsVersion '<span class="red">17.0</span>'</code></li></ul>
+                    <br>
+                </li>
+                <li>IDE is not responsible for Builds</li>
+            </ul>
+        </article>
+    </slide>
+    
     
      <slide>    
       <aside class="note">
