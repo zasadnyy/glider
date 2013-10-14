@@ -1,6 +1,9 @@
-glider
+Gradle Presentation
 ======
 
-GDG rebrand of https://code.google.com/p/io-2012-slides/
+Live view: http://zasadnyy.github.io/gradle-slides/
 
-Live example http://gdg-x.github.io/glider/
+
+
+_Buit on the [GDG[x]-Glider](https://github.com/gdg-x/glider) engine_
+
